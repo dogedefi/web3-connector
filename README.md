@@ -1,1 +1,1 @@
-# @big3lib/dapp-connector
+# web3-connector
