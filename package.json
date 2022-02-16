@@ -44,10 +44,8 @@
     "@web3-react/injected-connector": "^6.0.7",
     "@web3-react/walletconnect-connector": "^6.2.0",
     "ethers": "^5.4.1",
-    "lerna": "^3.19.0",
     "react": ">=16.8",
     "react-dom": ">=16.8",
-    "rimraf": "^3.0.1",
     "tsdx": "^0.11.0"
   }
 }
