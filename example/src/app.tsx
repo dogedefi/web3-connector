@@ -5,8 +5,9 @@ import 'react';
 // import { setLocale } from 'umi';
 import enUS from 'antd/lib/locale/en_US';
 import { ConfigProvider } from 'antd';
-import { Web3ReactProvider } from '@web3-react/core';
-import { getLibrary } from 'web3-connector';
+import { getLibrary, Web3ReactCore } from 'web3-connector';
+
+const { Web3ReactProvider } = Web3ReactCore;
 
 // setLocale('en-US', false);
 // setLocale('zh-CN', false);
