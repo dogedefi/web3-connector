@@ -43,4 +43,4 @@ export { default as useEagerConnect } from "./useEagerConnect";
 export { getLibrary, ConnectorNames, connectorsByName } from "./utils/web3";
 export { setupNetwork } from "./utils/network";
 
-export { default as Web3ReactCore } from "@web3-react/core";
+export * from "@web3-react/core";

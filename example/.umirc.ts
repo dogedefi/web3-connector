@@ -2,6 +2,9 @@ import { defineConfig } from 'umi';
 import pxToViewPort from 'postcss-px-to-viewport';
 
 export default defineConfig({
+  define: {
+    'process.env.CUSTOM_CHAINS': 'dev',
+  },
   nodeModulesTransform: {
     type: 'none',
   },
