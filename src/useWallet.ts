@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo } from "react";
 import {
   connectorLocalStorageKeyV2,
   walletLocalStorageKey,
@@ -6,49 +6,51 @@ import {
   connectedKey,
   ConnectorNames,
   connectors as config,
-  Chain
-} from '.'
+  Chain,
+  ChainScope,
+} from ".";
 
 const useWallet = (chain: Chain) => {
-  const { login, logout } = useAuth()
+  const { login, logout } = useAuth();
 
   const disconnect = useCallback(() => {
-    logout()
+    logout();
 
-    localStorage.setItem(connectedKey, 'disconnected')
-    localStorage.removeItem(walletLocalStorageKey)
-    localStorage.removeItem(connectorLocalStorageKeyV2)
-  }, [])
+    localStorage.setItem(connectedKey, "disconnected");
+    localStorage.removeItem(walletLocalStorageKey);
+    localStorage.removeItem(connectorLocalStorageKeyV2);
+  }, []);
 
-  const connect = useCallback(async walletConfig => {
+  const connect = useCallback(async (walletConfig) => {
     // About MSStream: https://docs.microsoft.com/en-us/previous-versions/hh772328(v=vs.85)
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
+    const isIOS =
+      /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
     // Since iOS does not support Trust Wallet we fall back to WalletConnect
-    if (walletConfig.title === 'Trust Wallet' && isIOS) {
-      await login(ConnectorNames.WalletConnect)
+    if (walletConfig.title === "Trust Wallet" && isIOS) {
+      await login(ConnectorNames.WalletConnect);
     } else {
-      await login(walletConfig.connectorId)
+      await login(walletConfig.connectorId);
     }
 
-    localStorage.setItem(connectedKey, 'connected')
-    localStorage.setItem(walletLocalStorageKey, walletConfig.title)
-    localStorage.setItem(connectorLocalStorageKeyV2, walletConfig.connectorId)
-  }, [])
+    localStorage.setItem(connectedKey, "connected");
+    localStorage.setItem(walletLocalStorageKey, walletConfig.title);
+    localStorage.setItem(connectorLocalStorageKeyV2, walletConfig.connectorId);
+  }, []);
 
   const connectors = useMemo(() => {
-    return config.filter(connector => {
-      if (chain?.name === 'OEC') {
-        return !['BinanceWallet'].includes(connector.title)
+    return config.filter((connector) => {
+      if (chain?.name === ChainScope.OEC) {
+        return !["BinanceWallet"].includes(connector.title);
       }
-      if (chain?.name === 'BSC') {
-        return !['OKExWallet'].includes(connector.title)
+      if (chain?.name === ChainScope.BSC) {
+        return !["OKExWallet"].includes(connector.title);
       }
-      return !['BinanceWallet', 'OKExWallet'].includes(connector.title)
-    })
-  }, [chain])
+      return !["BinanceWallet", "OKExWallet"].includes(connector.title);
+    });
+  }, [chain]);
 
-  return { connect, disconnect, connectors }
-}
+  return { connect, disconnect, connectors };
+};
 
-export default useWallet
+export default useWallet;
