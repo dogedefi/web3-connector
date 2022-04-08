@@ -15,10 +15,22 @@ export interface Config {
 
 export interface Chain {
   name: ChainScope;
-  config: any;
+  config: ChainConfig;
 }
 
 export interface ChainModel {
   chain: Chain;
   setChain: (chain: Chain) => void;
+}
+
+export interface ChainConfig {
+  chainId: string;
+  chainName: string;
+  nativeCurrency: {
+    name: string;
+    symbol: string;
+    decimals: number;
+  };
+  rpcUrls: string[];
+  blockExplorerUrls: string[];
 }
