@@ -56,9 +56,13 @@ export const defaultChains = {
   },
 };
 
-export const chains = process.env.CUSTOM_CHAINS
-  ? require(`/chains.${process.env.CUSTOM_CHAINS}`)
-  : defaultChains;
+export const chains = (() => {
+  try {
+    return require(`/chains.config`);
+  } catch (error) {
+    return defaultChains;
+  }
+})();
 console.log("chains config:", chains);
 
 export const chainIds = (Object.values(chains) as ChainConfig[]).map((chain) =>
