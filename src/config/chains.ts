@@ -56,13 +56,7 @@ export const defaultChains = {
   },
 };
 
-export const chains = (() => {
-  try {
-    return require(`/chains.config`);
-  } catch (error) {
-    return defaultChains;
-  }
-})();
+export const chains = window.chains || defaultChains;
 console.log("chains config:", chains);
 
 export const chainIds = (Object.values(chains) as ChainConfig[]).map((chain) =>
