@@ -1,15 +1,3 @@
-# umi project
+# Web3 Connector
 
-## Getting Started
-
-Install dependencies,
-
-```bash
-$ yarn
-```
-
-Start the dev server,
-
-```bash
-$ yarn start
-```
+A web3 core library that supports multiple chains. Can be integrated into other React Framework Plugins. 
