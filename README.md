@@ -1,5 +1,5 @@
-# web3-connector
+# Web3 Connector
 
-### Based on UMI.js
+A web3 core library that supports multiple chains. Can be integrated into other React Framework Plugins. 
 
-You can import with the use of [@dogedefi/plugin-multichain](https://github.com/dogedefi/umi-plugins/tree/master/packages/plugin-multichain)
+Example: [@dogedefi/plugin-multichain](https://github.com/dogedefi/umi-plugins/tree/master/packages/plugin-multichain)
