@@ -16,9 +16,10 @@ const useWallet = (chain: Chain) => {
   const disconnect = useCallback(() => {
     logout();
 
-    localStorage.setItem(connectedKey, "disconnected");
-    localStorage.removeItem(walletLocalStorageKey);
-    localStorage.removeItem(connectorLocalStorageKeyV2);
+    // localStorage.setItem(connectedKey, "disconnected");
+    // localStorage.removeItem(walletLocalStorageKey);
+    // localStorage.removeItem(connectorLocalStorageKeyV2);
+    localStorage.clear();
   }, []);
 
   const connect = useCallback(async (walletConfig) => {
