@@ -38,13 +38,16 @@ export const setupNetwork = async (chain?: Chain) => {
 
       // should check chainId if match between plugin and local config
       const chainId = await provider.request({ method: 'eth_chainId' }) // from wallet plugin
-      const isMatch = chainId === chain?.config?.chainId
-      if (isSwitching && isMatch) {
-        localStorage.setItem(chainLocalKey, JSON.stringify(chain))
+      const matched = chainId === chain?.config?.chainId
+      if (isSwitching && matched) {
+        localStorage.setItem(chainLocalKey, JSON.stringify(chain));
+      }
+      if (!matched) {
+        localStorage.removeItem(chainLocalKey);
       }
 
-      return isMatch
-    } catch (error) {
+      return matched;
+    } catch (error: any) {
       console.error(error)
       // This error code indicates that the chain has not been added to MetaMask.
       // Should add the chain
