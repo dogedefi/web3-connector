@@ -47,11 +47,11 @@ export const setupNetwork = async (chain?: Chain) => {
       }
 
       return matched;
-    } catch (error) {
+    } catch (error: any) {
       console.error(error)
       // This error code indicates that the chain has not been added to MetaMask.
       // Should add the chain
-      if ((error as any)?.code === 4902) {
+      if (error?.code === 4902) {
         try {
           await provider.request({
             method: 'wallet_addEthereumChain',

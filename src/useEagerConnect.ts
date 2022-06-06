@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import useAuth from "./useAuth";
 import { connectorLocalStorageKey, ConnectorNames } from ".";
 
@@ -18,7 +18,6 @@ const _binanceChainListener = async () =>
 
 // connect wallet eagerly
 const useEagerConnect = () => {
-  const [error, setError] = useState<any>(null);
   const { login } = useAuth();
 
   useEffect(() => {
@@ -30,25 +29,17 @@ const useEagerConnect = () => {
       const isConnectorBinanceChain = connectorId === ConnectorNames.BSC;
       const isBinanceChainDefined = Reflect.has(window, "BinanceChain");
 
-      (async () => {
-        try {
-          // Currently BSC extension doesn't always inject in time.
-          // We must check to see if it exists, and if not, wait for it before proceeding.
-          if (isConnectorBinanceChain && !isBinanceChainDefined) {
-            await _binanceChainListener();
-            await login(connectorId);
-            return;
-          }
+      // Currently BSC extension doesn't always inject in time.
+      // We must check to see if it exists, and if not, wait for it before proceeding.
+      if (isConnectorBinanceChain && !isBinanceChainDefined) {
+        _binanceChainListener().then(() => login(connectorId));
 
-          await login(connectorId);
-        } catch (error) {
-          setError(error);
-        }
-      })();
+        return;
+      }
+
+      login(connectorId);
     }
   }, [login]);
-
-  return { error };
 };
 
 export default useEagerConnect;
