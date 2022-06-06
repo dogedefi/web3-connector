@@ -21,6 +21,7 @@ export interface Chain {
 export interface ChainModel {
   chain: Chain;
   setChain: (chain: Chain) => void;
+  matched: boolean;
 }
 
 export interface ChainConfig {

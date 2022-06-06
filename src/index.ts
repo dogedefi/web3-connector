@@ -3,11 +3,12 @@ import { useEffect, useState } from "react";
 import { chainLocalKey, ChainScope } from "./config";
 import { chains } from "./config/chains";
 import { Chain as DataType } from "./config/types";
-import { setupNetwork } from "./utils/network";
+import { setupNetwork, checkIfMatch, getProvider } from "./utils/network";
 
 const defaultChain: DataType = { name: ChainScope.BSC, config: chains.BSC };
 
 export const initChainModel = () => {
+  const [matched, setMatched] = useState(false);
   const [chain, setChain] = useState<DataType>(defaultChain);
 
   // initial chain config
@@ -16,9 +17,11 @@ export const initChainModel = () => {
 
     if (!chainConfig) {
       setupNetwork(defaultChain);
+      checkIfMatch(defaultChain).then((res) => setMatched(res));
     } else if (chainConfig.startsWith("{") && chainConfig.endsWith("}")) {
       const cachedChain = JSON.parse(chainConfig);
       setChain(cachedChain);
+      checkIfMatch(cachedChain).then((res) => setMatched(res));
       setupNetwork(cachedChain);
     } else {
       localStorage.clear();
@@ -26,7 +29,21 @@ export const initChainModel = () => {
     }
   }, []);
 
-  return { chain, setChain };
+  useEffect(() => {
+    const provider: any = getProvider();
+    const reload = () => window.location.reload();
+    if (provider) {
+      provider.on("chainChanged", reload);
+      provider.on("accountsChanged", reload);
+    }
+
+    return () => {
+      provider.removeListener("chainChanged", reload);
+      provider.removeListener("accountsChanged", reload);
+    };
+  }, []);
+
+  return { chain, setChain, matched };
 };
 
 // export
