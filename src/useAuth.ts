@@ -15,7 +15,7 @@ import { connectorLocalStorageKey } from './config'
 
 // api for login and logout
 const useAuth = () => {
-  const { activate, deactivate } = useWeb3React()
+  const { activate, deactivate, setError, error } = useWeb3React()
   const login = useCallback(
     async (connectorId: ConnectorNames) => {
       const connector = connectorsByName[connectorId]
@@ -29,7 +29,7 @@ const useAuth = () => {
           } else {
             window.localStorage.removeItem(connectorLocalStorageKey)
             if (error instanceof NoEthereumProviderError || error instanceof NoBscProviderError) {
-              alert('Provider error, no provider was found')
+              setError(new Error("Provider error, no provider was found"));
             } else if (
               error instanceof UserRejectedRequestErrorInjected ||
               error instanceof UserRejectedRequestErrorWalletConnect
@@ -38,9 +38,11 @@ const useAuth = () => {
                 const walletConnector = connector as WalletConnectConnector
                 walletConnector.walletConnectProvider = null
               }
-              alert('Authorization Error, Please authorize to access your account')
+              setError(
+                new Error("Authorization Error, Please authorize to access your account")
+              );
             } else {
-              alert(error.name + ' ' + error.message)
+              setError(error);
             }
           }
         })
@@ -60,7 +62,7 @@ const useAuth = () => {
     }
   }, [deactivate])
 
-  return { login, logout }
+  return { login, logout, error };
 }
 
 export default useAuth

@@ -18,7 +18,7 @@ const _binanceChainListener = async () =>
 
 // connect wallet eagerly
 const useEagerConnect = () => {
-  const { login } = useAuth();
+  const { login, error } = useAuth();
 
   useEffect(() => {
     const connectorId = window.localStorage.getItem(
@@ -40,6 +40,8 @@ const useEagerConnect = () => {
       login(connectorId);
     }
   }, [login]);
+
+  return { error };
 };
 
 export default useEagerConnect;
