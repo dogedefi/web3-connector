@@ -60,6 +60,7 @@ const useAuth = () => {
       connectorsByName[ConnectorNames.WalletConnect].close()
       connectorsByName[ConnectorNames.WalletConnect].walletConnectProvider = null
     }
+    window.location.reload();
   }, [deactivate])
 
   return { login, logout, error };
