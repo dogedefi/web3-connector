@@ -9,6 +9,7 @@ const defaultChain: DataType = { name: ChainScope.BSC, config: chains.BSC };
 
 export const initChainModel = () => {
   const [matched, setMatched] = useState(false);
+  const [signal, setSignal] = useState(false);
   const [chain, setChain] = useState<DataType>(defaultChain);
 
   // initial chain config
@@ -31,7 +32,7 @@ export const initChainModel = () => {
 
   useEffect(() => {
     const provider: any = getProvider();
-    const reload = () => window.location.reload();
+    const reload = () => setSignal(true);
     if (provider) {
       provider.on("chainChanged", reload);
       provider.on("accountsChanged", reload);
@@ -43,7 +44,7 @@ export const initChainModel = () => {
     };
   }, []);
 
-  return { chain, setChain, matched };
+  return { chain, setChain, matched, signal };
 };
 
 // export
