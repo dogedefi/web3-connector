@@ -17,7 +17,8 @@ export const initChainModel = () => {
     let chainConfig = localStorage.getItem(chainLocalKey);
 
     if (!chainConfig) {
-      setupNetwork(defaultChain);
+      // TODO explore way if switch
+      // setupNetwork(defaultChain);
       checkIfMatch(defaultChain).then((res) => setMatched(res));
     } else if (chainConfig.startsWith("{") && chainConfig.endsWith("}")) {
       const cachedChain = JSON.parse(chainConfig);
