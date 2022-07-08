@@ -17,7 +17,7 @@ const _binanceChainListener = async () =>
   );
 
 // connect wallet eagerly
-const useEagerConnect = () => {
+const useEagerConnect = (signed = true) => {
   const { login, error } = useAuth();
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const useEagerConnect = () => {
       connectorLocalStorageKey
     ) as ConnectorNames;
 
-    if (connectorId) {
+    if (connectorId && signed) {
       const isConnectorBinanceChain = connectorId === ConnectorNames.BSC;
       const isBinanceChainDefined = Reflect.has(window, "BinanceChain");
 

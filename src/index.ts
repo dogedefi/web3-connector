@@ -9,7 +9,8 @@ const defaultChain: DataType = { name: ChainScope.BSC, config: chains.BSC };
 
 export const initChainModel = () => {
   const [matched, setMatched] = useState(false);
-  const [signal, setSignal] = useState(false);
+  const [chainChanged, setChainChanged] = useState(false);
+  const [accountsChanged, setAccountsChanged] = useState(false);
   const [chain, setChain] = useState<DataType>(defaultChain);
 
   // initial chain config
@@ -33,19 +34,21 @@ export const initChainModel = () => {
 
   useEffect(() => {
     const provider: any = getProvider();
-    const reload = () => setSignal(true);
+    const handleChainChanged = () => setChainChanged(true);
+    const handleAccountsChanged = () => setAccountsChanged(true);
+
     if (provider) {
-      provider.on("chainChanged", reload);
-      provider.on("accountsChanged", reload);
+      provider.on("chainChanged", handleChainChanged);
+      provider.on("accountsChanged", handleAccountsChanged);
     }
 
     return () => {
-      provider.removeListener("chainChanged", reload);
-      provider.removeListener("accountsChanged", reload);
+      provider.removeListener("chainChanged", handleChainChanged);
+      provider.removeListener("accountsChanged", handleAccountsChanged);
     };
   }, []);
 
-  return { chain, setChain, matched, signal };
+  return { chain, setChain, matched, chainChanged, accountsChanged };
 };
 
 // export
