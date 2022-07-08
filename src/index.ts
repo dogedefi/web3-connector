@@ -11,6 +11,7 @@ export const initChainModel = () => {
   const [matched, setMatched] = useState(false);
   const [chainChanged, setChainChanged] = useState(false);
   const [accountsChanged, setAccountsChanged] = useState(false);
+  const [allNotConnected, setAllNotConnected] = useState(false);
   const [chain, setChain] = useState<DataType>(defaultChain);
 
   // initial chain config
@@ -35,7 +36,10 @@ export const initChainModel = () => {
   useEffect(() => {
     const provider: any = getProvider();
     const handleChainChanged = () => setChainChanged(true);
-    const handleAccountsChanged = () => setAccountsChanged(true);
+    const handleAccountsChanged = (accounts: string[]) => {
+      setAllNotConnected(accounts.length === 0);
+      setAccountsChanged(true);
+    };
 
     if (provider) {
       provider.on("chainChanged", handleChainChanged);
@@ -48,7 +52,14 @@ export const initChainModel = () => {
     };
   }, []);
 
-  return { chain, setChain, matched, chainChanged, accountsChanged };
+  return {
+    chain,
+    setChain,
+    matched,
+    chainChanged,
+    accountsChanged,
+    allNotConnected,
+  };
 };
 
 // export
