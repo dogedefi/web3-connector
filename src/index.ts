@@ -1,17 +1,23 @@
 // initial chain info
 import { useEffect, useState } from "react";
-import { chainLocalKey, ChainScope } from "./config";
+import { chainLocalKey } from "./config";
 import { chains } from "./config/chains";
-import { Chain as DataType } from "./config/types";
+import { Chain as DataType, ChainConfig } from "./config/types";
 import { setupNetwork, checkIfMatch, getProvider } from "./utils/network";
 
-const defaultChain: DataType = { name: ChainScope.BSC, config: chains.BSC };
+const defaultChain: DataType = {
+  name: (Object.values(chains)[0] as ChainConfig).chainName,
+  config: Object.values(chains)[0] as ChainConfig,
+};
 
 export const initChainModel = () => {
   const [matched, setMatched] = useState(false);
+  const [accounts, setAccounts] = useState<string[]>([]);
   const [chainChanged, setChainChanged] = useState(false);
   const [accountsChanged, setAccountsChanged] = useState(false);
   const [allNotConnected, setAllNotConnected] = useState(false);
+  const [accountDisconnected, setAccountDisconnected] = useState(false);
+  const [accountConnected, setAccountConnected] = useState(false);
   const [chain, setChain] = useState<DataType>(defaultChain);
 
   // initial chain config
@@ -34,10 +40,22 @@ export const initChainModel = () => {
   }, []);
 
   useEffect(() => {
+    (async () => {
+      const provider: any = getProvider();
+      if (provider) {
+        const accounts = await provider.request({ method: "eth_accounts" });
+        setAccounts(accounts);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
     const provider: any = getProvider();
     const handleChainChanged = () => setChainChanged(true);
-    const handleAccountsChanged = (accounts: string[]) => {
-      setAllNotConnected(accounts.length === 0);
+    const handleAccountsChanged = (_accounts: string[]) => {
+      setAllNotConnected(_accounts.length === 0);
+      setAccountDisconnected(_accounts.length < accounts.length);
+      setAccountConnected(_accounts.length > accounts.length);
       setAccountsChanged(true);
     };
 
@@ -50,15 +68,18 @@ export const initChainModel = () => {
       provider.removeListener("chainChanged", handleChainChanged);
       provider.removeListener("accountsChanged", handleAccountsChanged);
     };
-  }, []);
+  }, [accounts]);
 
   return {
     chain,
+    accounts,
     setChain,
     matched,
     chainChanged,
     accountsChanged,
-    allNotConnected,
+    allNotConnected, // no account is connected
+    accountDisconnected, // deactive account
+    accountConnected, // active account
   };
 };
 

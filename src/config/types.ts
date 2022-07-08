@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { ChainScope } from "../config";
+// import { ChainScope } from "../config";
 import { ConnectorNames } from "../utils/web3";
 
 export { ConnectorNames } from "../utils/web3";
@@ -14,7 +14,7 @@ export interface Config {
 }
 
 export interface Chain {
-  name: ChainScope;
+  name: string;
   config: ChainConfig;
 }
 
